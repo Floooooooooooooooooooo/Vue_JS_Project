@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro Hangman</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <main class="game-shell">
+      <p class="game-label">Vue.js Projekt</p>
+      <h1 class="game-title">Retro Hangman</h1>
+      <p class="game-subtitle">{{ message }}</p>
+
+      <section class="game-panel">
+        <p class="panel-title">Spielfeld</p>
+        <p class="word-preview">_ _ _ _ _</p>
+        <button class="pixel-button" type="button" @click="showHint">
+          Test-Button
+        </button>
+      </section>
+
+      <p v-if="hintVisible" class="hint-text">
+        Vue ist aktiv und das Grundgerüst funktioniert.
+      </p>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
