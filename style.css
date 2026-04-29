@@ -58,10 +58,50 @@ body {
   font-size: 1.9rem;
 }
 
+.game-container {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
 .game-panel {
+  flex: 1;
   padding: 24px 16px;
   border: 3px solid var(--text-main);
   background: var(--panel);
+}
+
+.capybara-container {
+  flex: 0 0 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.capybara {
+  width: 140px;
+  height: 84px;
+  animation: capybaraRotate 6s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 122, 89, 0.3));
+}
+
+@keyframes capybaraRotate {
+  0% {
+    transform: translateX(0) rotateY(0deg);
+  }
+  25% {
+    transform: translateX(40px) rotateY(-15deg);
+  }
+  50% {
+    transform: translateX(0) rotateY(0deg);
+  }
+  75% {
+    transform: translateX(-40px) rotateY(15deg);
+  }
+  100% {
+    transform: translateX(0) rotateY(0deg);
+  }
 }
 
 .word-preview {
