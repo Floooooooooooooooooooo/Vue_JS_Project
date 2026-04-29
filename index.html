@@ -16,13 +16,44 @@
       <h1 class="game-title">Retro Hangman</h1>
       <p class="game-subtitle">{{ message }}</p>
 
-      <section class="game-panel">
-        <p class="panel-title">Spielfeld</p>
-        <p class="word-preview">_ _ _ _ _</p>
-        <button class="pixel-button" type="button" @click="selectRandomWord">
-          Neues Testwort
-        </button>
-        <p class="selected-word-test">Testwort: {{ selectedWord }}</p>
+      <section class="game-container">
+        <section class="game-panel">
+          <p class="panel-title">Spielfeld</p>
+          <p class="word-preview">{{ displayWord }}</p>
+          <button class="pixel-button" type="button" @click="selectRandomWord">
+            Neues Testwort
+          </button>
+          <p class="selected-word-test">Testwort: {{ selectedWord }}</p>
+        </section>
+
+        <div class="capybara-container">
+          <svg class="capybara" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+            <!-- Körper -->
+            <ellipse cx="50" cy="35" rx="35" ry="18" fill="#8B7355" stroke="#000" stroke-width="1.5"/>
+            <!-- Kopf -->
+            <circle cx="28" cy="25" r="14" fill="#8B7355" stroke="#000" stroke-width="1.5"/>
+            <!-- Schnauze -->
+            <ellipse cx="18" cy="27" rx="8" ry="6" fill="#A0826D" stroke="#000" stroke-width="1.5"/>
+            <!-- Nase -->
+            <circle cx="14" cy="26" r="2" fill="#000"/>
+            <!-- Linkes Auge -->
+            <circle cx="24" cy="20" r="2.5" fill="#000"/>
+            <!-- Rechtes Auge -->
+            <circle cx="32" cy="19" r="2.5" fill="#000"/>
+            <!-- Linkes Ohr -->
+            <circle cx="23" cy="12" r="3" fill="#8B7355" stroke="#000" stroke-width="1.5"/>
+            <!-- Rechtes Ohr -->
+            <circle cx="34" cy="11" r="3" fill="#8B7355" stroke="#000" stroke-width="1.5"/>
+            <!-- Vordere linke Pfote -->
+            <rect x="35" y="48" width="6" height="10" rx="3" fill="#8B7355" stroke="#000" stroke-width="1.5"/>
+            <!-- Vordere rechte Pfote -->
+            <rect x="48" y="48" width="6" height="10" rx="3" fill="#8B7355" stroke="#000" stroke-width="1.5"/>
+            <!-- Hintere linke Pfote -->
+            <rect x="62" y="48" width="6" height="10" rx="3" fill="#8B7355" stroke="#000" stroke-width="1.5"/>
+            <!-- Hintere rechte Pfote -->
+            <rect x="75" y="48" width="6" height="10" rx="3" fill="#8B7355" stroke="#000" stroke-width="1.5"/>
+          </svg>
+        </div>
       </section>
 
       <p class="hint-text">
