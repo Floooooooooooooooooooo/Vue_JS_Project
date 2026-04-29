@@ -3,7 +3,7 @@ const { createApp } = Vue;
 createApp({
   data() {
     return {
-      message: "Schritt 3: Ein zufaelliges Wort wird ausgewaehlt.",
+      message: "Schritt 4: Das geheime Wort wird verdeckt angezeigt.",
       selectedWord: "",
       guessedLetters: [],
       // Wortliste für Hangman (einfach erweiterbar)
@@ -42,10 +42,6 @@ createApp({
       const randomIndex = Math.floor(Math.random() * this.words.length);
       this.selectedWord = this.words[randomIndex];
       this.guessedLetters = [];
-      // Alle Buchstaben des Wortes zum Anzeigen hinzufügen
-      this.selectedWord.split("").forEach(letter => {
-        this.guessedLetters.push(letter);
-      });
     }
   }
 }).mount("#app");
