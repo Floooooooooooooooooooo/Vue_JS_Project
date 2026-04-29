@@ -3,8 +3,8 @@ const { createApp } = Vue;
 createApp({
   data() {
     return {
-      message: "Schritt 1: Das Retro-Grundgerüst steht.",
-      hintVisible: false,
+      message: "Schritt 3: Ein zufaelliges Wort wird ausgewaehlt.",
+      selectedWord: "",
       // Wortliste für Hangman (einfach erweiterbar)
       words: (typeof window !== "undefined" && window.WORDS && window.WORDS.length)
         ? window.WORDS
@@ -22,9 +22,13 @@ createApp({
           ],
     };
   },
+  mounted() {
+    this.selectRandomWord();
+  },
   methods: {
-    showHint() {
-      this.hintVisible = true;
+    selectRandomWord() {
+      const randomIndex = Math.floor(Math.random() * this.words.length);
+      this.selectedWord = this.words[randomIndex];
     }
   }
 }).mount("#app");

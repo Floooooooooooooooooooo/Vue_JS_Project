@@ -19,18 +19,20 @@
       <section class="game-panel">
         <p class="panel-title">Spielfeld</p>
         <p class="word-preview">_ _ _ _ _</p>
-        <button class="pixel-button" type="button" @click="showHint">
-          Test-Button
+        <button class="pixel-button" type="button" @click="selectRandomWord">
+          Neues Testwort
         </button>
+        <p class="selected-word-test">Testwort: {{ selectedWord }}</p>
       </section>
 
-      <p v-if="hintVisible" class="hint-text">
+      <p class="hint-text">
         Vue ist aktiv und das Grundgerüst funktioniert.
       </p>
     </main>
   </div>
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="app.js"></script>
+  <script src="words.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

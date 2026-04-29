@@ -94,3 +94,9 @@ body {
   color: var(--success);
   font-size: 1.8rem;
 }
+
+.selected-word-test {
+  margin: 22px 0 0;
+  color: var(--text-soft);
+  font-size: 1.6rem;
+}
