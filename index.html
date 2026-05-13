@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Retro Hangman</title>
+  <title>Retro Standman</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -13,44 +13,51 @@
   <div id="app">
     <main class="game-shell">
       <p class="game-label">Vue.js Projekt</p>
-      <h1 class="game-title">Retro Hangman</h1>
-      <p class="game-subtitle">{{ message }}</p>
+      <h1 class="game-title">Retro Standman</h1>
 
-      <section class="game-panel">
-        <p class="panel-title">Spielfeld</p>
-        <p class="word-preview">{{ displayWord }}</p>
-        
-        <div class="input-section">
-          <input 
-            type="text" 
-            v-model="inputLetter"
-            @keypress="handleKeyPress"
-            class="letter-input"
-            placeholder="Buchstabe"
-            maxlength="1"
-          />
-          <button class="pixel-button" type="button" @click="guessLetter">
-            Prüfen
-          </button>
+      <section class="game-board">
+        <div class="hangman-stage" aria-label="Platz fuer das Hangman Strichmaennchen">
+          <div class="gallows-preview" aria-hidden="true">
+            <span class="gallows-base"></span>
+            <span class="gallows-pole"></span>
+            <span class="gallows-top"></span>
+            <span class="gallows-rope"></span>
+          </div>
         </div>
 
-        <p v-if="feedback" :class="['feedback', 'feedback-' + feedbackType]">
-          {{ feedback }}
-        </p>
-        
-        <button class="pixel-button" type="button" @click="selectRandomWord" style="margin-top: 16px;">
-          Neues Wort
-        </button>
-      </section>
+        <div class="game-panel">
+          <div class="panel-header">
+            <p class="panel-title">Loesungswort</p>
+            <p class="error-counter">Fehler: {{ errorCount }}</p>
+          </div>
 
-      <p class="hint-text">
-        Erratene Buchstaben: {{ guessedLetters.join(", ") || "keine" }}
-      </p>
+          <p class="word-preview">{{ displayWord }}</p>
+
+          <form class="input-section" @submit.prevent="guessLetter">
+            <input
+              type="text"
+              v-model="inputLetter"
+              class="letter-input"
+              placeholder="A"
+              maxlength="1"
+              aria-label="Buchstaben eingeben"
+            />
+          </form>
+
+          <p v-if="feedback" :class="['feedback', 'feedback-' + feedbackType]">
+            {{ feedback }}
+          </p>
+
+          <button class="pixel-button" type="button" @click="selectRandomWord">
+            Neues Wort
+          </button>
+        </div>
+      </section>
     </main>
   </div>
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="words.js?v=4"></script>
-  <script src="app.js?v=4"></script>
+  <script src="words.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

@@ -3,12 +3,12 @@ const { createApp } = Vue;
 createApp({
   data() {
     return {
-      message: "Schritt 4: Gib einen Buchstaben ein!",
       selectedWord: "",
       guessedLetters: [],
       inputLetter: "",
       feedback: "",
       feedbackType: "",
+      errorCount: 0,
       // Wortliste für Hangman (einfach erweiterbar)
       words: (typeof window !== "undefined" && window.WORDS && window.WORDS.length)
         ? window.WORDS
@@ -48,9 +48,11 @@ createApp({
       this.inputLetter = "";
       this.feedback = "";
       this.feedbackType = "";
+      this.errorCount = 0;
     },
     guessLetter() {
       const letter = this.inputLetter.toLowerCase().trim();
+      this.inputLetter = "";
       
       // Prüfungen
       if (!letter) {
@@ -68,7 +70,6 @@ createApp({
       if (this.guessedLetters.includes(letter)) {
         this.feedback = "Diesen Buchstaben hast du schon geraten!";
         this.feedbackType = "info";
-        this.inputLetter = "";
         return;
       }
       
@@ -80,15 +81,9 @@ createApp({
         this.feedback = `Richtig! '${letter}' ist im Wort!`;
         this.feedbackType = "success";
       } else {
+        this.errorCount += 1;
         this.feedback = `Falsch! '${letter}' ist nicht im Wort!`;
         this.feedbackType = "error";
-      }
-      
-      this.inputLetter = "";
-    },
-    handleKeyPress(event) {
-      if (event.key === "Enter") {
-        this.guessLetter();
       }
     }
   }
