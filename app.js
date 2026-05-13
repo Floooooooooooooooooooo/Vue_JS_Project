@@ -3,6 +3,7 @@ const { createApp } = Vue;
 createApp({
   data() {
     return {
+      maxErrors: 6,
       selectedWord: "",
       guessedLetters: [],
       inputLetter: "",
@@ -35,6 +36,21 @@ createApp({
           this.guessedLetters.includes(letter) ? letter : "_"
         )
         .join(" ");
+    },
+    hasWon() {
+      if (!this.selectedWord) return false;
+      return this.selectedWord
+        .split("")
+        .every(letter => this.guessedLetters.includes(letter));
+    },
+    isGameOver() {
+      return this.errorCount >= this.maxErrors;
+    },
+    isGameFinished() {
+      return this.hasWon || this.isGameOver;
+    },
+    hangmanImage() {
+      return `pictures/hangman_${this.errorCount}.png`;
     }
   },
   mounted() {
@@ -51,6 +67,15 @@ createApp({
       this.errorCount = 0;
     },
     guessLetter() {
+      if (this.isGameFinished) {
+        this.feedback = this.hasWon
+          ? "Du hast schon gewonnen! Starte ein neues Wort."
+          : "Spiel vorbei! Starte ein neues Wort.";
+        this.feedbackType = "info";
+        this.inputLetter = "";
+        return;
+      }
+
       const letter = this.inputLetter.toLowerCase().trim();
       this.inputLetter = "";
       
@@ -78,12 +103,22 @@ createApp({
       
       // Feedback geben
       if (this.selectedWord.includes(letter)) {
-        this.feedback = `Richtig! '${letter}' ist im Wort!`;
-        this.feedbackType = "success";
+        if (this.hasWon) {
+          this.feedback = "Du hast das Wort erraten!";
+          this.feedbackType = "success";
+        } else {
+          this.feedback = `Richtig! '${letter}' ist im Wort!`;
+          this.feedbackType = "success";
+        }
       } else {
         this.errorCount += 1;
-        this.feedback = `Falsch! '${letter}' ist nicht im Wort!`;
-        this.feedbackType = "error";
+        if (this.isGameOver) {
+          this.feedback = `Spiel vorbei! Das Wort war '${this.selectedWord}'.`;
+          this.feedbackType = "error";
+        } else {
+          this.feedback = `Falsch! '${letter}' ist nicht im Wort!`;
+          this.feedbackType = "error";
+        }
       }
     }
   }

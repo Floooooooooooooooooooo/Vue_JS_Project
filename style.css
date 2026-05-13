@@ -1,7 +1,6 @@
 :root {
   --page: #101114;
   --panel: #f7f5ef;
-  --panel-soft: #ece7dc;
   --ink: #181818;
   --muted: #69645d;
   --line: #181818;
@@ -34,8 +33,7 @@ body {
   box-shadow: 8px 8px 0 #000;
 }
 
-.game-label,
-.panel-title {
+.game-label {
   margin: 0;
   font-family: "Press Start 2P", cursive;
   font-size: 0.74rem;
@@ -77,45 +75,11 @@ body {
   padding: 22px;
 }
 
-.gallows-preview {
-  position: relative;
-  width: min(100%, 230px);
-  aspect-ratio: 1 / 1.1;
-}
-
-.gallows-preview span {
-  position: absolute;
-  display: block;
-  background: var(--line);
-}
-
-.gallows-base {
-  left: 22px;
-  right: 12px;
-  bottom: 18px;
-  height: 8px;
-}
-
-.gallows-pole {
-  left: 52px;
-  top: 20px;
-  bottom: 18px;
-  width: 8px;
-}
-
-.gallows-top {
-  left: 52px;
-  right: 44px;
-  top: 20px;
-  height: 8px;
-}
-
-.gallows-rope {
-  right: 44px;
-  top: 20px;
-  width: 6px;
-  height: 52px;
-  background: var(--accent);
+.hangman-image {
+  width: min(100%, 260px);
+  height: auto;
+  image-rendering: pixelated;
+  object-fit: contain;
 }
 
 .game-panel {
@@ -123,26 +87,6 @@ body {
   flex-direction: column;
   justify-content: center;
   padding: 24px;
-}
-
-.panel-header {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 28px;
-}
-
-.error-counter {
-  flex: 0 0 auto;
-  margin: 0;
-  border: 3px solid var(--line);
-  padding: 8px 12px;
-  background: var(--panel-soft);
-  color: var(--accent);
-  font-family: "Press Start 2P", cursive;
-  font-size: 0.72rem;
-  line-height: 1.6;
 }
 
 .word-preview {
@@ -248,9 +192,4 @@ body {
     min-height: 280px;
   }
 
-  .panel-header {
-    align-items: flex-start;
-    flex-direction: column;
-    margin-bottom: 22px;
-  }
 }

@@ -17,20 +17,14 @@
 
       <section class="game-board">
         <div class="hangman-stage" aria-label="Platz fuer das Hangman Strichmaennchen">
-          <div class="gallows-preview" aria-hidden="true">
-            <span class="gallows-base"></span>
-            <span class="gallows-pole"></span>
-            <span class="gallows-top"></span>
-            <span class="gallows-rope"></span>
-          </div>
+          <img
+            class="hangman-image"
+            :src="hangmanImage"
+            :alt="`Hangman Stufe ${errorCount}`"
+          />
         </div>
 
         <div class="game-panel">
-          <div class="panel-header">
-            <p class="panel-title">Loesungswort</p>
-            <p class="error-counter">Fehler: {{ errorCount }}</p>
-          </div>
-
           <p class="word-preview">{{ displayWord }}</p>
 
           <form class="input-section" @submit.prevent="guessLetter">
