@@ -95,3 +95,55 @@ body {
   font-size: 1.8rem;
 }
 
+.input-section {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.letter-input {
+  width: 60px;
+  height: 50px;
+  border: 3px solid #000;
+  padding: 8px;
+  background: var(--panel);
+  color: var(--text-main);
+  font-family: "VT323", monospace;
+  font-size: 1.8rem;
+  text-align: center;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 #000;
+}
+
+.letter-input:focus {
+  outline: none;
+  background: rgba(248, 225, 108, 0.1);
+}
+
+.feedback {
+  margin: 16px 0;
+  font-size: 1.6rem;
+  font-weight: bold;
+  padding: 12px;
+  border: 2px solid;
+}
+
+.feedback-success {
+  color: var(--success);
+  border-color: var(--success);
+  background: rgba(140, 233, 154, 0.1);
+}
+
+.feedback-error {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(255, 122, 89, 0.1);
+}
+
+.feedback-info {
+  color: var(--accent-hover);
+  border-color: var(--accent-hover);
+  background: rgba(255, 209, 102, 0.1);
+}
+

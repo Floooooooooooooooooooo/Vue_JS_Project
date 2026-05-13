@@ -19,13 +19,32 @@
       <section class="game-panel">
         <p class="panel-title">Spielfeld</p>
         <p class="word-preview">{{ displayWord }}</p>
-        <button class="pixel-button" type="button" @click="selectRandomWord">
+        
+        <div class="input-section">
+          <input 
+            type="text" 
+            v-model="inputLetter"
+            @keypress="handleKeyPress"
+            class="letter-input"
+            placeholder="Buchstabe"
+            maxlength="1"
+          />
+          <button class="pixel-button" type="button" @click="guessLetter">
+            Prüfen
+          </button>
+        </div>
+
+        <p v-if="feedback" :class="['feedback', 'feedback-' + feedbackType]">
+          {{ feedback }}
+        </p>
+        
+        <button class="pixel-button" type="button" @click="selectRandomWord" style="margin-top: 16px;">
           Neues Wort
         </button>
       </section>
 
       <p class="hint-text">
-        Das Wort bleibt geheim und wird als Unterstriche angezeigt.
+        Erratene Buchstaben: {{ guessedLetters.join(", ") || "keine" }}
       </p>
     </main>
   </div>
