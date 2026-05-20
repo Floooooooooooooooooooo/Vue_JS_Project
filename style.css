@@ -233,6 +233,17 @@ input {
     padding: 20px 16px 24px;
   }
 
+  .tabs-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tab-button {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 0.6rem;
+  }
+
   .game-board {
     grid-template-columns: 1fr;
     min-height: auto;
@@ -251,4 +262,155 @@ input {
     flex-direction: column;
     gap: 6px;
   }
+
+  .leaderboard-table {
+    font-size: 0.75rem;
+  }
+
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 8px 4px;
+  }
+}
+
+/* Tabs */
+.tabs-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.tab-button {
+  padding: 12px 24px;
+  background: var(--board);
+  color: var(--text);
+  border: 2px solid var(--line);
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-button:hover {
+  background: var(--line);
+  color: var(--page);
+}
+
+.tab-active {
+  background: var(--line);
+  color: var(--page);
+}
+
+/* Leaderboard */
+.leaderboard-container {
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.leaderboard-panel {
+  width: 100%;
+  padding: 24px !important;
+  min-height: 400px;
+  max-width: 900px;
+}
+
+.leaderboard-title {
+  margin: 0 0 24px;
+  color: var(--title);
+  font-size: 1.35rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.leaderboard-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--accent);
+  font-family: "VT323", monospace;
+  font-size: 1.2rem;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-family: "VT323", monospace;
+  font-size: 0.9rem;
+}
+
+.leaderboard-table thead {
+  background: var(--line);
+  color: var(--page);
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid var(--line);
+}
+
+.leaderboard-table th {
+  font-weight: bold;
+}
+
+.leaderboard-table tbody tr:nth-child(odd) {
+  background: rgba(248, 232, 90, 0.05);
+}
+
+.leaderboard-table .rank {
+  color: var(--title);
+  font-weight: bold;
+  width: 60px;
+}
+
+.leaderboard-table .name {
+  color: var(--success);
+  text-align: left;
+}
+
+.leaderboard-table .score {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.leaderboard-table .date {
+  color: var(--text);
+  font-size: 0.85rem;
+}
+
+/* Username Input Form */
+.attempts-info {
+  color: var(--accent);
+  font-family: "VT323", monospace;
+  font-size: 1.2rem;
+  margin: 12px 0 !important;
+}
+
+.username-input-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.username-input.nes-input {
+  padding: 10px;
+  background: #fff;
+  color: #151019;
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.username-input-form .nes-btn {
+  font-size: 0.7rem;
+}
+
+.entry-saved {
+  color: var(--success);
+  font-size: 1.5rem;
+  margin: 20px 0 !important;
 }

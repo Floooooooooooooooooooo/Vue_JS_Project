@@ -6,7 +6,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Retro Hangman</title>
+  <title>Retro Standman</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -17,9 +17,22 @@
   <div id="app">
     <main class="game-shell">
       <p class="game-label">Vue.js Projekt</p>
-      <h1 class="game-title">Retro Hangman</h1>
+      <h1 class="game-title">Retro Standman</h1>
 
-      <section class="game-board">
+      <div class="tabs-container">
+        <button 
+          :class="['tab-button', { 'tab-active': currentView === 'game' }]" 
+          @click="currentView = 'game'">
+          SPIEL
+        </button>
+        <button 
+          :class="['tab-button', { 'tab-active': currentView === 'leaderboard' }]" 
+          @click="currentView = 'leaderboard'">
+          BESTENLISTE
+        </button>
+      </div>
+
+      <section v-if="currentView === 'game'" class="game-board">
         <div class="nes-container is-dark hangman-stage" aria-label="Hangman Anzeige">
           <img
             class="hangman-image"
@@ -44,7 +57,7 @@
               placeholder="A"
               maxlength="1"
               aria-label="Buchstaben eingeben"
-              :disabled="gameStatus !== 'playing'"
+              :disabled="isGameFinished"
               autocomplete="off"
             />
           </form>
@@ -59,10 +72,56 @@
         </div>
       </section>
 
-      <div v-if="gameStatus !== 'playing'" class="result-backdrop" role="alertdialog" aria-modal="true">
+      <section v-if="currentView === 'leaderboard'" class="leaderboard-container">
+        <div class="nes-container is-dark leaderboard-panel">
+          <h2 class="leaderboard-title">BESTENLISTE</h2>
+          <div v-if="leaderboard.length === 0" class="leaderboard-empty">
+            <p>Noch keine Einträge</p>
+          </div>
+          <table v-else class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rang</th>
+                <th>Name</th>
+                <th>Versuche</th>
+                <th>Datum</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(entry, index) in leaderboard" :key="index">
+                <td class="rank">{{ index + 1 }}</td>
+                <td class="name">{{ entry.name }}</td>
+                <td class="score">{{ entry.attempts }}</td>
+                <td class="date">{{ entry.date }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="nes-btn is-warning pixel-button" style="margin-top: 20px;" type="button" @click="currentView = 'game'">
+            Zurück zum Spiel
+          </button>
+        </div>
+      </section>
+
+      <div v-if="isGameFinished" class="result-backdrop" role="alertdialog" aria-modal="true">
         <div class="nes-container is-dark result-box">
-          <h2>{{ modalTitle }}</h2>
-          <p>{{ modalText }}</p>
+          <h2>{{ hasWon ? 'Gewonnen!' : 'Verloren!' }}</h2>
+          <p>{{ hasWon ? `Das Wort war: ${selectedWord}` : `Das Wort war: ${selectedWord}` }}</p>
+          <p class="attempts-info">Versuche: {{ errorCount + 1 }}</p>
+          <form v-if="!showUsernameInputDone" @submit.prevent="submitLeaderboardEntry" class="username-input-form">
+            <input
+              v-model="usernameInput"
+              type="text"
+              class="nes-input username-input"
+              placeholder="Dein Name"
+              maxlength="15"
+              required
+              autocomplete="off"
+            />
+            <button class="nes-btn is-success" type="submit">
+              Eintragen
+            </button>
+          </form>
+          <p v-else class="entry-saved">✓ Eingetragen!</p>
           <button class="nes-btn is-warning pixel-button" type="button" @click="selectRandomWord">
             Neues Spiel
           </button>
