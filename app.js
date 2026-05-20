@@ -3,14 +3,14 @@ const { createApp } = Vue;
 createApp({
   data() {
     return {
-      maxErrors: 6,
       selectedWord: "",
       guessedLetters: [],
       inputLetter: "",
       feedback: "",
       feedbackType: "",
       errorCount: 0,
-      // Wortliste für Hangman (einfach erweiterbar)
+      maxErrors: 7,
+      gameStatus: "playing",
       words: (typeof window !== "undefined" && window.WORDS && window.WORDS.length)
         ? window.WORDS
         : [
@@ -30,27 +30,25 @@ createApp({
   computed: {
     displayWord() {
       if (!this.selectedWord) return "";
+
       return this.selectedWord
         .split("")
-        .map(letter => 
-          this.guessedLetters.includes(letter) ? letter : "_"
-        )
+        .map(letter => this.guessedLetters.includes(letter) ? letter : "_")
         .join(" ");
     },
-    hasWon() {
-      if (!this.selectedWord) return false;
-      return this.selectedWord
-        .split("")
-        .every(letter => this.guessedLetters.includes(letter));
-    },
-    isGameOver() {
-      return this.errorCount >= this.maxErrors;
-    },
-    isGameFinished() {
-      return this.hasWon || this.isGameOver;
-    },
     hangmanImage() {
-      return `pictures/hangman_${this.errorCount}.png`;
+      const imageNumber = Math.min(this.errorCount, 6);
+      return `pictures/hangman_${imageNumber}.png`;
+    },
+    modalTitle() {
+      return this.gameStatus === "won" ? "Gewonnen!" : "Verloren!";
+    },
+    modalText() {
+      if (this.gameStatus === "won") {
+        return `Super! Das Wort war "${this.selectedWord}".`;
+      }
+
+      return `Das Wort war "${this.selectedWord}".`;
     }
   },
   mounted() {
@@ -65,60 +63,55 @@ createApp({
       this.feedback = "";
       this.feedbackType = "";
       this.errorCount = 0;
+      this.gameStatus = "playing";
     },
     guessLetter() {
-      if (this.isGameFinished) {
-        this.feedback = this.hasWon
-          ? "Du hast schon gewonnen! Starte ein neues Wort."
-          : "Spiel vorbei! Starte ein neues Wort.";
-        this.feedbackType = "info";
-        this.inputLetter = "";
-        return;
-      }
+      if (this.gameStatus !== "playing") return;
 
       const letter = this.inputLetter.toLowerCase().trim();
       this.inputLetter = "";
-      
-      // Prüfungen
+
       if (!letter) {
-        this.feedback = "Bitte gib einen Buchstaben ein!";
+        this.feedback = "Bitte gib einen Buchstaben ein.";
         this.feedbackType = "error";
         return;
       }
-      
+
       if (letter.length > 1) {
-        this.feedback = "Nur ein Buchstabe bitte!";
+        this.feedback = "Nur ein Buchstabe.";
         this.feedbackType = "error";
         return;
       }
-      
+
       if (this.guessedLetters.includes(letter)) {
-        this.feedback = "Diesen Buchstaben hast du schon geraten!";
+        this.feedback = "Schon versucht.";
         this.feedbackType = "info";
         return;
       }
-      
-      // Buchstabe hinzufügen
+
       this.guessedLetters.push(letter);
-      
-      // Feedback geben
+
       if (this.selectedWord.includes(letter)) {
-        if (this.hasWon) {
-          this.feedback = "Du hast das Wort erraten!";
-          this.feedbackType = "success";
-        } else {
-          this.feedback = `Richtig! '${letter}' ist im Wort!`;
-          this.feedbackType = "success";
+        this.feedback = `Richtig: ${letter.toUpperCase()}`;
+        this.feedbackType = "success";
+
+        const isSolved = this.selectedWord
+          .split("")
+          .every(wordLetter => this.guessedLetters.includes(wordLetter));
+
+        if (isSolved) {
+          this.gameStatus = "won";
         }
-      } else {
-        this.errorCount += 1;
-        if (this.isGameOver) {
-          this.feedback = `Spiel vorbei! Das Wort war '${this.selectedWord}'.`;
-          this.feedbackType = "error";
-        } else {
-          this.feedback = `Falsch! '${letter}' ist nicht im Wort!`;
-          this.feedbackType = "error";
-        }
+
+        return;
+      }
+
+      this.errorCount += 1;
+      this.feedback = `Falsch: ${letter.toUpperCase()}`;
+      this.feedbackType = "error";
+
+      if (this.errorCount >= this.maxErrors) {
+        this.gameStatus = "lost";
       }
     }
   }

@@ -2,56 +2,77 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Retro Standman</title>
+  <title>Retro Hangman</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <div id="app">
     <main class="game-shell">
       <p class="game-label">Vue.js Projekt</p>
-      <h1 class="game-title">Retro Standman</h1>
+      <h1 class="game-title">Retro Hangman</h1>
 
       <section class="game-board">
-        <div class="hangman-stage" aria-label="Platz fuer das Hangman Strichmaennchen">
+        <div class="nes-container is-dark hangman-stage" aria-label="Hangman Anzeige">
           <img
             class="hangman-image"
             :src="hangmanImage"
-            :alt="`Hangman Stufe ${errorCount}`"
-          />
+            :alt="`Hangman Bild bei ${errorCount} Fehlern`"
+          >
         </div>
 
-        <div class="game-panel">
+        <div class="nes-container is-dark game-panel">
+          <div class="panel-header">
+            <p class="panel-title">Spielfeld</p>
+            <p class="error-counter">Fehler: {{ errorCount }} / {{ maxErrors }}</p>
+          </div>
+
           <p class="word-preview">{{ displayWord }}</p>
 
           <form class="input-section" @submit.prevent="guessLetter">
             <input
               type="text"
               v-model="inputLetter"
-              class="letter-input"
+              class="nes-input letter-input"
               placeholder="A"
               maxlength="1"
               aria-label="Buchstaben eingeben"
+              :disabled="gameStatus !== 'playing'"
+              autocomplete="off"
             />
           </form>
 
-          <p v-if="feedback" :class="['feedback', 'feedback-' + feedbackType]">
+          <p :class="['feedback', feedbackType ? 'feedback-' + feedbackType : '']" aria-live="polite">
             {{ feedback }}
           </p>
 
-          <button class="pixel-button" type="button" @click="selectRandomWord">
+          <button class="nes-btn is-error pixel-button" type="button" @click="selectRandomWord">
             Neues Wort
           </button>
         </div>
       </section>
+
+      <div v-if="gameStatus !== 'playing'" class="result-backdrop" role="alertdialog" aria-modal="true">
+        <div class="nes-container is-dark result-box">
+          <h2>{{ modalTitle }}</h2>
+          <p>{{ modalText }}</p>
+          <button class="nes-btn is-warning pixel-button" type="button" @click="selectRandomWord">
+            Neues Spiel
+          </button>
+        </div>
+      </div>
     </main>
   </div>
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="words.js?v=5"></script>
-  <script src="app.js?v=5"></script>
+  <script src="words.js?v=7"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>
