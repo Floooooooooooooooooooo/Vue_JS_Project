@@ -11,6 +11,10 @@ createApp({
       errorCount: 0,
       maxErrors: 7,
       gameStatus: "playing",
+      playerName: "",
+      leaderboard: [],
+      leaderboardEntrySaved: false,
+      leaderboardMessage: "",
       words: (typeof window !== "undefined" && window.WORDS && window.WORDS.length)
         ? window.WORDS
         : [
@@ -52,9 +56,18 @@ createApp({
     }
   },
   mounted() {
+    this.loadLeaderboard();
     this.selectRandomWord();
   },
   methods: {
+    loadLeaderboard() {
+      if (typeof window === "undefined" || !window.Leaderboard) {
+        this.leaderboard = [];
+        return;
+      }
+
+      this.leaderboard = window.Leaderboard.load();
+    },
     selectRandomWord() {
       const randomIndex = Math.floor(Math.random() * this.words.length);
       this.selectedWord = this.words[randomIndex];
@@ -64,6 +77,26 @@ createApp({
       this.feedbackType = "";
       this.errorCount = 0;
       this.gameStatus = "playing";
+      this.playerName = "";
+      this.leaderboardEntrySaved = false;
+      this.leaderboardMessage = "";
+    },
+    saveWinner() {
+      if (this.gameStatus !== "won" || this.leaderboardEntrySaved) return;
+
+      if (typeof window === "undefined" || !window.Leaderboard) {
+        this.leaderboardMessage = "Bestenliste ist gerade nicht verfuegbar.";
+        return;
+      }
+
+      this.leaderboard = window.Leaderboard.add(
+        this.playerName,
+        this.errorCount,
+        this.selectedWord
+      );
+      this.leaderboardEntrySaved = true;
+      this.playerName = "";
+      this.leaderboardMessage = "Dein Ergebnis wurde gespeichert.";
     },
     guessLetter() {
       if (this.gameStatus !== "playing") return;
