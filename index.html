@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
   <div id="app">
@@ -23,12 +23,12 @@
         <button 
           :class="['tab-button', { 'tab-active': currentView === 'game' }]" 
           @click="currentView = 'game'">
-          SPIEL
+          🎮 SPIEL
         </button>
         <button 
           :class="['tab-button', { 'tab-active': currentView === 'leaderboard' }]" 
           @click="currentView = 'leaderboard'">
-          BESTENLISTE
+          🏆 BESTENLISTE
         </button>
       </div>
 
@@ -66,62 +66,71 @@
             {{ feedback }}
           </p>
 
-          <button class="nes-btn is-error pixel-button" type="button" @click="selectRandomWord">
-            Neues Wort
-          </button>
+          <div class="button-group">
+            <button class="nes-btn is-error pixel-button" type="button" @click="selectRandomWord">
+              Neues Wort
+            </button>
+            <button class="nes-btn is-warning pixel-button" type="button" @click="currentView = 'leaderboard'">
+              Bestenliste anschauen
+            </button>
+          </div>
         </div>
       </section>
 
       <section v-if="currentView === 'leaderboard'" class="leaderboard-container">
         <div class="nes-container is-dark leaderboard-panel">
-          <h2 class="leaderboard-title">BESTENLISTE</h2>
+          <h2 class="leaderboard-title">🏆 BESTENLISTE</h2>
           <div v-if="leaderboard.length === 0" class="leaderboard-empty">
-            <p>Noch keine Einträge</p>
+            <p>Noch keine Einträge vorhanden</p>
           </div>
           <table v-else class="leaderboard-table">
             <thead>
               <tr>
                 <th>Rang</th>
-                <th>Name</th>
-                <th>Versuche</th>
-                <th>Datum</th>
+                <th>Spieler</th>
+                <th>Fehler</th>
+                <th>Wort</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(entry, index) in leaderboard" :key="index">
+              <tr v-for="(entry, index) in leaderboard" :key="entry.playedAt + entry.playerName">
                 <td class="rank">{{ index + 1 }}</td>
-                <td class="name">{{ entry.name }}</td>
-                <td class="score">{{ entry.attempts }}</td>
-                <td class="date">{{ entry.date }}</td>
+                <td class="name">{{ entry.playerName }}</td>
+                <td class="score">{{ entry.errors }}</td>
+                <td class="word">{{ entry.word }}</td>
               </tr>
             </tbody>
           </table>
           <button class="nes-btn is-warning pixel-button" style="margin-top: 20px;" type="button" @click="currentView = 'game'">
-            Zurück zum Spiel
+            ← Zurück zum Spiel
           </button>
         </div>
       </section>
 
-      <div v-if="isGameFinished" class="result-backdrop" role="alertdialog" aria-modal="true">
+      <div v-if="gameStatus !== 'playing'" class="result-backdrop" role="alertdialog" aria-modal="true">
         <div class="nes-container is-dark result-box">
-          <h2>{{ hasWon ? 'Gewonnen!' : 'Verloren!' }}</h2>
-          <p>{{ hasWon ? `Das Wort war: ${selectedWord}` : `Das Wort war: ${selectedWord}` }}</p>
-          <p class="attempts-info">Versuche: {{ errorCount + 1 }}</p>
-          <form v-if="!showUsernameInputDone" @submit.prevent="submitLeaderboardEntry" class="username-input-form">
+          <h2>{{ modalTitle }}</h2>
+          <p>{{ modalText }}</p>
+          <p class="attempts-info">Fehler: {{ errorCount }} / {{ maxErrors }}</p>
+
+          <form v-if="gameStatus === 'won' && !leaderboardEntrySaved" class="winner-form" @submit.prevent="saveWinner">
+            <label class="winner-label" for="playerName">Dein Name</label>
             <input
-              v-model="usernameInput"
+              id="playerName"
+              v-model="playerName"
+              class="nes-input winner-input"
               type="text"
-              class="nes-input username-input"
-              placeholder="Dein Name"
-              maxlength="15"
-              required
+              maxlength="18"
               autocomplete="off"
-            />
-            <button class="nes-btn is-success" type="submit">
-              Eintragen
+              placeholder="Spieler"
+            >
+            <button class="nes-btn is-success pixel-button" type="submit">
+              Speichern
             </button>
           </form>
-          <p v-else class="entry-saved">✓ Eingetragen!</p>
+
+          <p v-if="leaderboardMessage" class="leaderboard-message">{{ leaderboardMessage }}</p>
+
           <button class="nes-btn is-warning pixel-button" type="button" @click="selectRandomWord">
             Neues Spiel
           </button>
@@ -132,6 +141,7 @@
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="words.js?v=7"></script>
-  <script src="app.js?v=7"></script>
+  <script src="leaderboard.js?v=1"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

@@ -203,9 +203,15 @@ input {
 
 .result-box.nes-container {
   width: min(100%, 430px);
+  max-height: calc(100vh - 56px);
+  overflow-y: auto;
   padding: 28px;
   background: var(--shell);
   text-align: center;
+}
+
+.result-box-wide.nes-container {
+  width: min(100%, 660px);
 }
 
 .result-box h2 {
@@ -220,6 +226,109 @@ input {
   font-family: "VT323", monospace;
   font-size: 1.8rem;
   line-height: 1.2;
+}
+
+.winner-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+  margin: 0 0 18px;
+  text-align: left;
+}
+
+.winner-label {
+  grid-column: 1 / -1;
+  color: var(--accent);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.winner-input.nes-input {
+  min-width: 0;
+  height: 52px;
+  background: #fff;
+  color: #151019;
+  font-family: "VT323", monospace;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.leaderboard-message {
+  margin: 0 0 14px;
+  color: var(--success);
+  font-family: "VT323", monospace;
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.leaderboard-section {
+  margin: 8px 0 22px;
+  text-align: left;
+}
+
+.leaderboard-section h3 {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.leaderboard-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.leaderboard-entry {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) 110px minmax(90px, 0.8fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 3px solid var(--line);
+  background: var(--board);
+  color: var(--text);
+  font-family: "VT323", monospace;
+  font-size: 1.35rem;
+  line-height: 1.05;
+}
+
+.leaderboard-rank {
+  color: var(--accent);
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  font-size: 0.62rem;
+}
+
+.leaderboard-name,
+.leaderboard-word {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard-errors {
+  color: var(--danger);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.leaderboard-word {
+  color: var(--success);
+  text-align: right;
+}
+
+.leaderboard-empty {
+  margin: 0;
+  color: var(--accent);
+  font-family: "VT323", monospace;
+  font-size: 1.45rem;
+  line-height: 1.2;
+  text-align: center;
 }
 
 @media (max-width: 760px) {
@@ -261,6 +370,11 @@ input {
   .panel-header {
     flex-direction: column;
     gap: 6px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
   }
 
   .leaderboard-table {
@@ -413,4 +527,40 @@ input {
   color: var(--success);
   font-size: 1.5rem;
   margin: 20px 0 !important;
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.button-group .nes-btn {
+  flex: 1;
+  min-width: 140px;
+}
+
+@media (max-width: 500px) {
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button-group .nes-btn {
+    min-width: 100%;
+  }
+
+  .winner-form {
+    grid-template-columns: 1fr;
+  }
+
+  .leaderboard-entry {
+    grid-template-columns: 42px minmax(0, 1fr) 92px;
+  }
+
+  .leaderboard-word {
+    display: none;
+  }
 }
