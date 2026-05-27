@@ -3,6 +3,7 @@ const { createApp } = Vue;
 createApp({
   data() {
     return {
+      currentView: "game",
       selectedWord: "",
       guessedLetters: [],
       inputLetter: "",
@@ -80,6 +81,7 @@ createApp({
       this.playerName = "";
       this.leaderboardEntrySaved = false;
       this.leaderboardMessage = "";
+      this.currentView = "game";
     },
     saveWinner() {
       if (this.gameStatus !== "won" || this.leaderboardEntrySaved) return;
