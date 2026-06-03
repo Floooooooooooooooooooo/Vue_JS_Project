@@ -1,56 +1,63 @@
 # Retro Standman - Vue.js Hangman Game
 
-Ein Klassiker Hangman-Spiel mit Retro-Pixel-Design, gebaut mit Vue.js 3 und nes.css UI Framework.
+Ein Hangman-Spiel mit Retro-Pixel-Design, gebaut mit Vue.js 3, nes.css und Firebase Firestore.
 
 ## Features
-- 🎮 Interaktives Hangman-Spiel mit 10 deutschen Wörtern
-- 👾 Retro Pixel-Art Design
-- 📊 Bestenliste mit Google Sheets Integration (geräteübergreifend)
-- 📱 Responsive Design (Desktop & Mobile)
-- ⚡ Keine Abhängigkeiten außer Vue.js
 
-## Spielweise
-1. Öffne die App im Browser
-2. Rate Buchstaben um das versteckte Wort zu erraten
-3. Du hast 6 Versuche bis du verlierst
-4. Nach jedem Spiel kannst du dich in die Bestenliste eintragen
+- Interaktives Hangman-Spiel mit deutscher Wortliste
+- Bestenliste ueber Firebase Firestore
+- Browser- und geraeteuebergreifende Speicherung
+- Responsive Retro-Oberflaeche
+- Kein Build-Schritt notwendig
 
-## Bestenliste Setup
-Damit die Bestenliste funktioniert, musst du Google Apps Script einrichten:
-→ Siehe [GOOGLE_APPS_SCRIPT_ANLEITUNG.md](GOOGLE_APPS_SCRIPT_ANLEITUNG.md)
+## Start
 
-Nach dem Setup:
-- Ergebnisse werden in Google Sheets gespeichert
-- Bestenliste ist auf allen Geräten verfügbar
-- Sortierung nach besten Ergebnissen (weniger Versuche = besser)
+1. Firebase-Projekt erstellen und Firestore aktivieren.
+2. Firebase-Web-App registrieren.
+3. Firebase-Konfigurationswerte in `firebase-config.js` eintragen.
+4. `index.html` ueber einen lokalen Webserver oeffnen.
 
-## Installation
-1. Clone das Repository
-2. Öffne `index.html` in einem Browser
-3. (Optional) Richte Google Apps Script für die Bestenliste ein
+Eine genaue Schritt-fuer-Schritt-Anleitung steht in `FIREBASE_SETUP.md`.
 
-## Technologie Stack
-- **Frontend**: Vue.js 3 (CDN)
-- **Styling**: nes.css + Custom CSS
-- **Fonts**: Press Start 2P, VT323 (Google Fonts)
-- **Backend für Bestenliste**: Google Apps Script + Google Sheets
+Wichtig: Weil die App JavaScript-Module nutzt, sollte sie ueber `http://localhost/...` laufen. Unter XAMPP ist das zum Beispiel:
+
+```text
+http://localhost/Vue/project/Vue_JS_Project/
+```
+
+## Firebase
+
+Die Bestenliste liegt in der Firestore-Collection:
+
+```text
+leaderboardEntries
+```
+
+Jeder Eintrag enthaelt:
+
+```text
+playerName
+errors
+word
+playedAt
+createdAt
+```
+
+Die App sortiert nach den wenigsten Fehlern und zeigt die besten 10 Eintraege.
 
 ## Projektstruktur
-```
-├── index.html                          # Haupt-HTML mit Vue-Container
-├── app.js                             # Vue.js App Logic
-├── style.css                          # Custom Styling
-├── words.js                           # Wortliste
-├── README.md                          # Diese Datei
-└── GOOGLE_APPS_SCRIPT_ANLEITUNG.md   # Setup für Bestenliste
-└── pictures/                          # Hangman-Bilder (hangman_0.png - hangman_6.png)
+
+```text
+index.html          Haupt-HTML mit Vue-Container
+app.js              Vue-App und Spiellogik
+leaderboard.js      Firestore-Zugriff fuer die Bestenliste
+firebase-config.js  Firebase-Konfiguration
+FIREBASE_SETUP.md   Firebase-Einrichtung und Firestore-Regeln
+style.css           Styling
+words.js            Wortliste
+pictures/           Hangman-Bilder
 ```
 
-## Wörter hinzufügen
-Öffne `words.js` und ergänze deine Wörter im Array:
-```javascript
-const WORDS = [
-  "dein_wort_hier",
-  // ... weitere Wörter
-];
-```
+## Woerter hinzufuegen
+
+Neue Woerter koennen in `words.js` im globalen `WORDS`-Array ergaenzt werden.

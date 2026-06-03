@@ -1,4 +1,6 @@
-const { createApp } = Vue;
+import { Leaderboard } from "./leaderboard.js";
+
+const { createApp } = window.Vue;
 
 createApp({
   data() {
@@ -16,6 +18,9 @@ createApp({
       leaderboard: [],
       leaderboardEntrySaved: false,
       leaderboardMessage: "",
+      leaderboardError: "",
+      leaderboardLoading: false,
+      leaderboardSaving: false,
       words: (typeof window !== "undefined" && window.WORDS && window.WORDS.length)
         ? window.WORDS
         : [
@@ -54,20 +59,29 @@ createApp({
       }
 
       return `Das Wort war "${this.selectedWord}".`;
+    },
+    isGameFinished() {
+      return this.gameStatus !== "playing";
     }
   },
   mounted() {
-    this.loadLeaderboard();
     this.selectRandomWord();
+    this.loadLeaderboard();
   },
   methods: {
-    loadLeaderboard() {
-      if (typeof window === "undefined" || !window.Leaderboard) {
-        this.leaderboard = [];
-        return;
-      }
+    async loadLeaderboard() {
+      this.leaderboardLoading = true;
+      this.leaderboardError = "";
 
-      this.leaderboard = window.Leaderboard.load();
+      try {
+        this.leaderboard = await Leaderboard.load();
+      } catch (error) {
+        console.error(error);
+        this.leaderboard = [];
+        this.leaderboardError = error.message || "Bestenliste konnte nicht geladen werden.";
+      } finally {
+        this.leaderboardLoading = false;
+      }
     },
     selectRandomWord() {
       const randomIndex = Math.floor(Math.random() * this.words.length);
@@ -83,22 +97,32 @@ createApp({
       this.leaderboardMessage = "";
       this.currentView = "game";
     },
-    saveWinner() {
-      if (this.gameStatus !== "won" || this.leaderboardEntrySaved) return;
+    async showLeaderboard() {
+      this.currentView = "leaderboard";
+      await this.loadLeaderboard();
+    },
+    async saveWinner() {
+      if (this.gameStatus !== "won" || this.leaderboardEntrySaved || this.leaderboardSaving) return;
 
-      if (typeof window === "undefined" || !window.Leaderboard) {
-        this.leaderboardMessage = "Bestenliste ist gerade nicht verfuegbar.";
-        return;
+      this.leaderboardSaving = true;
+      this.leaderboardMessage = "";
+      this.leaderboardError = "";
+
+      try {
+        this.leaderboard = await Leaderboard.add(
+          this.playerName,
+          this.errorCount,
+          this.selectedWord
+        );
+        this.leaderboardEntrySaved = true;
+        this.playerName = "";
+        this.leaderboardMessage = "Dein Ergebnis wurde gespeichert.";
+      } catch (error) {
+        console.error(error);
+        this.leaderboardMessage = error.message || "Ergebnis konnte nicht gespeichert werden.";
+      } finally {
+        this.leaderboardSaving = false;
       }
-
-      this.leaderboard = window.Leaderboard.add(
-        this.playerName,
-        this.errorCount,
-        this.selectedWord
-      );
-      this.leaderboardEntrySaved = true;
-      this.playerName = "";
-      this.leaderboardMessage = "Dein Ergebnis wurde gespeichert.";
     },
     guessLetter() {
       if (this.gameStatus !== "playing") return;

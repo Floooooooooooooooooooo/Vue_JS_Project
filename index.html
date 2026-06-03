@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
   <div id="app">
@@ -20,15 +20,19 @@
       <h1 class="game-title">Retro Standman</h1>
 
       <div class="tabs-container">
-        <button 
-          :class="['tab-button', { 'tab-active': currentView === 'game' }]" 
-          @click="currentView = 'game'">
-          🎮 SPIEL
+        <button
+          :class="['tab-button', { 'tab-active': currentView === 'game' }]"
+          type="button"
+          @click="currentView = 'game'"
+        >
+          SPIEL
         </button>
-        <button 
-          :class="['tab-button', { 'tab-active': currentView === 'leaderboard' }]" 
-          @click="currentView = 'leaderboard'">
-          🏆 BESTENLISTE
+        <button
+          :class="['tab-button', { 'tab-active': currentView === 'leaderboard' }]"
+          type="button"
+          @click="showLeaderboard"
+        >
+          BESTENLISTE
         </button>
       </div>
 
@@ -59,7 +63,7 @@
               aria-label="Buchstaben eingeben"
               :disabled="isGameFinished"
               autocomplete="off"
-            />
+            >
           </form>
 
           <p :class="['feedback', feedbackType ? 'feedback-' + feedbackType : '']" aria-live="polite">
@@ -70,7 +74,7 @@
             <button class="nes-btn is-error pixel-button" type="button" @click="selectRandomWord">
               Neues Wort
             </button>
-            <button class="nes-btn is-warning pixel-button" type="button" @click="currentView = 'leaderboard'">
+            <button class="nes-btn is-warning pixel-button" type="button" @click="showLeaderboard">
               Bestenliste anschauen
             </button>
           </div>
@@ -79,10 +83,20 @@
 
       <section v-if="currentView === 'leaderboard'" class="leaderboard-container">
         <div class="nes-container is-dark leaderboard-panel">
-          <h2 class="leaderboard-title">🏆 BESTENLISTE</h2>
-          <div v-if="leaderboard.length === 0" class="leaderboard-empty">
-            <p>Noch keine Einträge vorhanden</p>
+          <h2 class="leaderboard-title">BESTENLISTE</h2>
+
+          <div v-if="leaderboardLoading" class="leaderboard-empty">
+            <p>Bestenliste wird geladen...</p>
           </div>
+
+          <div v-else-if="leaderboardError" class="leaderboard-empty leaderboard-error">
+            <p>{{ leaderboardError }}</p>
+          </div>
+
+          <div v-else-if="leaderboard.length === 0" class="leaderboard-empty">
+            <p>Noch keine Eintraege vorhanden</p>
+          </div>
+
           <table v-else class="leaderboard-table">
             <thead>
               <tr>
@@ -93,7 +107,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(entry, index) in leaderboard" :key="entry.playedAt + entry.playerName">
+              <tr v-for="(entry, index) in leaderboard" :key="entry.id || entry.playedAt + entry.playerName">
                 <td class="rank">{{ index + 1 }}</td>
                 <td class="name">{{ entry.playerName }}</td>
                 <td class="score">{{ entry.errors }}</td>
@@ -101,9 +115,15 @@
               </tr>
             </tbody>
           </table>
-          <button class="nes-btn is-warning pixel-button" style="margin-top: 20px;" type="button" @click="currentView = 'game'">
-            ← Zurück zum Spiel
-          </button>
+
+          <div class="button-group leaderboard-actions">
+            <button class="nes-btn is-primary pixel-button" type="button" @click="loadLeaderboard">
+              Aktualisieren
+            </button>
+            <button class="nes-btn is-warning pixel-button" type="button" @click="currentView = 'game'">
+              Zurueck zum Spiel
+            </button>
+          </div>
         </div>
       </section>
 
@@ -124,8 +144,8 @@
               autocomplete="off"
               placeholder="Spieler"
             >
-            <button class="nes-btn is-success pixel-button" type="submit">
-              Speichern
+            <button class="nes-btn is-success pixel-button" type="submit" :disabled="leaderboardSaving">
+              {{ leaderboardSaving ? "Speichert..." : "Speichern" }}
             </button>
           </form>
 
@@ -141,7 +161,6 @@
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="words.js?v=7"></script>
-  <script src="leaderboard.js?v=1"></script>
-  <script src="app.js?v=8"></script>
+  <script type="module" src="app.js?v=9"></script>
 </body>
 </html>

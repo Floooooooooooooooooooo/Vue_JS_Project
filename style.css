@@ -275,6 +275,14 @@ input {
   text-align: center;
 }
 
+.leaderboard-empty.leaderboard-error {
+  color: var(--danger);
+}
+
+.leaderboard-actions {
+  margin-top: 20px;
+}
+
 .leaderboard-list {
   display: grid;
   gap: 8px;
